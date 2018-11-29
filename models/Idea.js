@@ -18,4 +18,4 @@ const IdeaSchema = new Schema({
     }
 });
 
-mongoose.model('ideas', IdeaSchema);gi
+mongoose.model('ideas', IdeaSchema);
