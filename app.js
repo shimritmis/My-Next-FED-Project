@@ -117,6 +117,7 @@ app.post('/ideas', (req,res)=> {
             new Idea(newUser)
             .save()
             .then(idea => {
+                req.flash('success_msg', 'Video idea added');
                 res.redirect('/ideas');
             })
         }
@@ -146,6 +147,16 @@ app.delete('/ideas/:id', (req, res)=> {
     req.flash('success_msg', 'Video idea removed');
     res.redirect('/ideas');
     });
+});
+
+// User Login Route
+app.get('/users/login', (req, res) => {
+    res.send('login');
+});
+
+// User Register Route
+app.get('/users/register', (req, res) => {
+    res.send('register');
 });
 const port = 5000;
 app.listen(port, ()=> {
