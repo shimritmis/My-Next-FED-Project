@@ -3,17 +3,19 @@ const exphbs = require ('express-handlebars');
 const methodOverride = require('method-override');
 const bodyParser = require ('body-parser');
 const mongoose = require('mongoose');
+// const MongoClient = require('mongodb').MongoClient;
 
 const app = express();
-
 
 // Map global promise- get rid of warning
 mongoose.Promise = global.Promise;
 
 // Connect to mongoose
-mongoose.connect('mongodb://localhost/vidjot-dev')
+mongoose.connect('mongodb://localhost/vidjot-dev', { useNewUrlParser: true })
 .then(()=> console.log('MongoDB Connected...'))
 .catch(err=>console.log(err));
+
+// MongoClient.connect("mongodb://localhost:5000", { useNewUrlParser: true })
 
 // Load Idea Model 
 require('./models/Idea');
@@ -30,10 +32,10 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 // Method override middleware
-app.use(methodOverride('_method'));
+app.use(methodOverride('_method'))
 
-//Index Route 
-app.get('/', (req, res)=> {
+// Index Route 
+app.get('/', (req, res)=> { 
     const title= "Welcome";
     res.render('index', {
         title:title
@@ -45,7 +47,7 @@ app.get('/about', (req,res)=> {
     res.render('about');
 });
 
-//Idea Index page
+// Idea Index page
 app.get('/ideas', (req,res)=> {
     Idea.find({})
     .sort({date:'desc'})
@@ -56,8 +58,7 @@ app.get('/ideas', (req,res)=> {
     });
 });
 
-
-//Add Idea Form
+// Add Idea Form
 app.get('/ideas/add', (req,res)=> {
     res.render('ideas/add');
 });
@@ -102,17 +103,13 @@ app.post('/ideas', (req,res)=> {
         }
 });
 
-
 // Edit Form process 
-app.put('ideas/:id', (req, res) => {
-    res.send('PUT'); 
+app.put('/ideas/:id', (req, res) => {
+    res.send('PUT')
 });
-
-
-
 
 const port = 5000;
 app.listen(port, ()=> {
     console.log(`Server Started on port ${port}`);
-    console.log('')
+    console.log('');
 });
