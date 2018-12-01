@@ -54,6 +54,10 @@ app.use(session({
     saveUninitialized: true,
 }));
 
+// Passport middleware- always after Express middleware
+app.use(passport.initialize());
+app.use(passport.session()); 
+
 app.use(flash()); 
 
 // Global variables
