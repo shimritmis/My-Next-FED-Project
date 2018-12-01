@@ -1,4 +1,5 @@
 const express = require ('express');
+const path = require('path'); 
 const exphbs = require ('express-handlebars');
 const methodOverride = require('method-override');
 const flash = require('connect-flash');
@@ -10,7 +11,8 @@ const mongoose = require('mongoose');
 const app = express();
 
 // Load Routes
-const ideas = require('./routes/ideas')
+const ideas = require('./routes/ideas');
+const users = require('./routes/users');
 
 // Map global promise- get rid of warning
 mongoose.Promise = global.Promise;
@@ -20,11 +22,10 @@ mongoose.connect('mongodb://localhost/vidjot-dev', { useNewUrlParser: true })
 .then(()=> console.log('MongoDB Connected...'))
 .catch(err=>console.log(err));
 
-// MongoClient.connect("mongodb://localhost:5000", { useNewUrlParser: true })
 
-// Load Idea Model 
-require('./models/Idea');
-const Idea = mongoose.model('ideas');
+// Load Idea Model - has been removed to ideas.js
+// require('./models/Idea');
+// const Idea = mongoose.model('ideas');
 
 // Handlebars Middleware
 app.engine('handlebars', exphbs ({
@@ -35,6 +36,9 @@ app.set('view engine', 'handlebars');
 // Body parser middleware -access whatever submitted by req.body, for example- in order to get form values.
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+
+// Static folder- sets the public folder to be the express static folder:
+app.use(express.static(path.join(__dirname, 'public')));
 
 // Method override middleware
 app.use(methodOverride('_method'))
@@ -69,18 +73,9 @@ app.get('/about', (req,res)=> {
     res.render('about');
 });
 
-// User Login Route
-app.get('/users/login', (req, res) => {
-    res.send('login');
-});
-
-// User Register Route
-app.get('/users/register', (req, res) => {
-    res.send('register');
-});
-
 // Use Routes
 app.use('/ideas', ideas);
+app.use('/users', users); 
 
 const port = 5000;
 
