@@ -1,5 +1,4 @@
 const mongoose = require ('mongoose');
-
 const Schema = mongoose.Schema;
 
 //Create Schema
@@ -24,4 +23,4 @@ const UserSchema = new Schema({
 
 mongoose.model('users', UserSchema);
 
-//NEVER EVER PUT PLAIN TEXT PASSWORDS IN YOUR DATABASE! (we'll be using bcrypt for that)
+//NEVER EVER PUT PLAIN TEXT PASSWORDS IN YOUR DATABASE! (we'll be using bcryptjs for that)
