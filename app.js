@@ -15,6 +15,9 @@ const app = express();
 const ideas = require('./routes/ideas');
 const users = require('./routes/users');
 
+// DB Config 
+const db = require('./config/database'); 
+
 // Passport Config 
 require('./config/passport')(passport); 
 
@@ -22,9 +25,11 @@ require('./config/passport')(passport);
 mongoose.Promise = global.Promise;
 
 // Connect to mongoose
-mongoose.connect('mongodb://localhost/vidjot-dev', { useNewUrlParser: true })
-.then(()=> console.log('MongoDB Connected...'))
-.catch(err=>console.log(err));
+mongoose.connect(db.mongoURI, { 
+    useNewUrlParser: true
+ })
+    .then(()=> console.log('MongoDB Connected...'))
+    .catch(err=>console.log(err));
 
 
 // Load Idea Model - has been removed to ideas.js
@@ -86,7 +91,7 @@ app.get('/about', (req,res)=> {
 app.use('/ideas', ideas);
 app.use('/users', users); 
 
-const port = 5000;
+const port =process.env.PORT || 5000;
 
 app.listen(port, () => {
     console.log(`Server Started on port ${port}`);
