@@ -9,7 +9,7 @@ const Idea = mongoose.model('ideas');
 
 // Idea Index page
 router.get('/', ensureAuthenticated, (req,res)=> {
-    Idea.find({})
+    Idea.find({user: req.user.id}) // user: req.user.id: only ideas that are related to a specific user. leaving an empy object will show us, for each one of the users, all the ideas from all of the users, and that's not what we want!
     .sort({date:'desc'})
     .then(ideas => {
         res.render('ideas/index', {
@@ -51,9 +51,10 @@ router.post('/', ensureAuthenticated, (req,res)=> {
              details: req.body.details
          });
         } else {
-            const newUser ={
+            const newUser = {
                 title: req.body.title,
-                details:req.body.details
+                details:req.body.details,
+                user:req.user.id
             }
             new Idea(newUser)
             .save()
